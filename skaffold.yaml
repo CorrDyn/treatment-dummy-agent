@@ -7,7 +7,7 @@ requires:
   - configs: ["cloud-spanner-emulator", "redis"]
     # path: ../dev-agents
     git:
-      repo: git@github.com:CorrDyn/treatment-dummy-agent.git
+      repo: git@github.com:CorrDyn/treatment-dev-agents.git
       ref: main
       path: ./skaffold.yaml
 
