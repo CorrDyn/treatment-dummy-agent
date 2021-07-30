@@ -1,0 +1,19 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+namespace: dummies
+
+resources:
+  - ../bases
+  - ./namespace.yaml
+
+
+configMapGenerator:
+- name: dummy-agent
+  literals:
+  - NODE_ENV=development
+  - REDISURI=redis.dev-agents.svc:6379
+  - GCLOUD_PROJECT=spanner-emulator
+  - SPANNER_INSTANCE=test-instance
+  - SPANNER_DB=song-db
+  - SPANNER_EMULATOR_HOST=cloud-spanner-emulator.dev-agents.svc:9010
