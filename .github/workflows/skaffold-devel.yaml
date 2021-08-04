@@ -35,6 +35,10 @@ jobs:
           location: ${{ env.GKE_ZONE }}
           credentials: ${{ secrets.DEVEL_GCP_CREDS }}
 
+      - name: Install K8s tools
+        run: |-
+          gcloud components install skaffold kustomize kubectl
+
       - name: Deploy to GKE
         run: |-
           skaffold run --profile "$SKAFFOLD_PROFILE" --default-repo "$SKAFFOLD_DEFAULT_REPO"
