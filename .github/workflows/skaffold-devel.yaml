@@ -29,17 +29,14 @@ jobs:
           project_id: ${{ env.PROJECT_ID }}
           export_default_credentials: "true"
 
-      - name: Config K8s
-        uses: google-github-actions/get-gke-credentials@main
-        with:
-          cluster_name: ${{ env.GKE_CLUSTER }}
-          location: ${{ env.GKE_ZONE }}
-          credentials: ${{ secrets.DEVEL_GCP_CREDS }}
-
       - name: Install K8s tools
         run: |-
           gcloud components install skaffold kustomize kubectl
-          gcloud auth
+
+      - name: GCP Auth
+        run: |-
+          gcloud --quiet auth configure-docker
+          gcloud container clusters get-credentials "$GKE_CLUSTER" --zone "$GKE_ZONE"
 
       - name: Deploy to GKE
         run: |-
