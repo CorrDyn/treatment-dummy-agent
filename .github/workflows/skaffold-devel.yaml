@@ -26,13 +26,13 @@ jobs:
         with:
           version: '350.0.0'
           service_account_key: ${{ secrets.DEVEL_GCP_CREDS }}
-          project_id: $PROJECT_ID
+          project_id: ${{ env.PROJECT_ID }}
 
       - name: Config K8s
         uses: google-github-actions/get-gke-credentials@main
         with:
-          cluster_name: $GKE_CLUSTER
-          location: $GKE_ZONE
+          cluster_name: ${{ env.GKE_CLUSTER }}
+          location: ${{ env.GKE_ZONE }}
           credentials: ${{ secrets.DEVEL_GCP_CREDS }}
 
       - name: Deploy to GKE
