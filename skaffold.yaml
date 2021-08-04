@@ -42,8 +42,7 @@ profiles:
     - op: remove
       path: /requires
   build:
-    googleCloudBuild:
-      projectId: trmt-001
+    googleCloudBuild: {}
 
   deploy:
     kubeContext: corrdyn-edge2mesh

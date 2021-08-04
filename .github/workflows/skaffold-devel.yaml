@@ -1,0 +1,34 @@
+name: Deploy to development GKE
+on:
+  push:
+    branches:
+      - development
+
+env:
+  PROJECT_ID: ${{ secrets.DEVEL_GCP_PROJECT }}
+  GKE_CLUSTER: corrdyn-edge2mesh
+  GKE_ZONE: us-central1-c
+  SKAFFOLD_DEFAULT_REPO: us.gcr.io/${{ secrets.DEVEL_GCP_PROJECT }}
+  SKAFFOLD_PROFILE: development
+
+jobs:
+  deploy:
+    name: Deploy
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository on development branch
+        uses: actions/checkout@v2
+        with:
+          ref: development
+
+      - name: Config GCP
+        uses: google-github-actions/get-gke-credentials@main
+        with:
+          cluster_name: $GKE_CLUSTER
+          location: $GKE_ZONE
+          credentials: ${{ secrets.DEVEL_GCP_CREDS }}
+
+      - name: Deploy to GKE
+        uses: google-github-actions/setup-gcloud@master
+        run: |-
+          skaffold run --profile "$SKAFFOLD_PROFILE" --default-repo "$SKAFFOLD_DEFAULT_REPO"
