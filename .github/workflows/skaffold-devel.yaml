@@ -22,6 +22,13 @@ jobs:
           ref: development
 
       - name: Config GCP
+        uses: google-github-actions/setup-gcloud@master
+        with:
+          version: '350.0.0'
+          service_account_key: ${{ secrets.DEVEL_GCP_CREDS }}
+          project_id: $PROJECT_ID
+
+      - name: Config K8s
         uses: google-github-actions/get-gke-credentials@main
         with:
           cluster_name: $GKE_CLUSTER
@@ -29,6 +36,5 @@ jobs:
           credentials: ${{ secrets.DEVEL_GCP_CREDS }}
 
       - name: Deploy to GKE
-        uses: google-github-actions/setup-gcloud@master
         run: |-
           skaffold run --profile "$SKAFFOLD_PROFILE" --default-repo "$SKAFFOLD_DEFAULT_REPO"
