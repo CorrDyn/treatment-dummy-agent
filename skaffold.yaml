@@ -45,6 +45,7 @@ profiles:
     googleCloudBuild: {}
 
   deploy:
+    kubeContext: corrdyn-edge2mesh
     kustomize:
       paths:
       - .k8s/devel

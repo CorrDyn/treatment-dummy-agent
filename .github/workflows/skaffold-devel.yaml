@@ -6,6 +6,7 @@ on:
 
 env:
   PROJECT_ID: ${{ secrets.DEVEL_GCP_PROJECT }}
+  # Should match skaffold profile deploy.kubeContext
   GKE_CLUSTER: corrdyn-edge2mesh
   GKE_ZONE: us-central1-c
   SKAFFOLD_DEFAULT_REPO: us.gcr.io/${{ secrets.DEVEL_GCP_PROJECT }}
@@ -37,6 +38,7 @@ jobs:
         run: |-
           gcloud --quiet auth configure-docker
           gcloud container clusters get-credentials "$GKE_CLUSTER" --zone "$GKE_ZONE"
+          kubectl config rename-context $(kubectl config current-context) "$GKE_CLUSTER"
 
       - name: Deploy to GKE
         run: |-
