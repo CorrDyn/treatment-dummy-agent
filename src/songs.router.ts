@@ -6,11 +6,8 @@ const router = express.Router()
 
 router.get('/:id', async (req: Request, res: Response) => {
   try {
-    const obj = await SongModel.getById(req.params.id)
-    if (!obj) {
-      return res.status(404).send({error: 'Not found'})
-    }
-    res.status(200).send(obj)
+    const [rows] = await SongModel.getById(req.params.id)
+    res.status(200).send(rows)
 
   } catch (err) {
     Logger.error(err)

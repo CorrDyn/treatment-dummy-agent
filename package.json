@@ -4,9 +4,9 @@
   "description": "This application provides a working example of a local development environment using skaffold and helper containers",
   "main": "src/dummy-agent.js",
   "scripts": {
-    "dev": "concurrently \"tsc -w\" \"nodemon ./dist/dummy-agent.js\"",
-    "postinstall": "tsc --build tsconfig.json",
-    "start": "node ./dist/dummy-agent.js",
+    "compile": "tsc && node ./dist/dummy-agent.js",
+    "dev": "nodemon -w src --exec 'npm run compile'",
+    "start": "tsc && node ./dist/dummy-agent.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "The Treatment.com Team",

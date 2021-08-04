@@ -12,5 +12,6 @@ if (AppConfig.redisCaCert) {
   redisOptions['tls'] = { ca: fs.readFileSync(AppConfig.redisCaCert) }
 }
 
+// init redis
 const redis = new Redis(AppConfig.redisUri, redisOptions)
 export default redis

@@ -17,11 +17,16 @@ export const save = (songs: Song[]) => {
 }
 
 
-export const getById = (sid: string): Song | null => {
+export const getById = (uuid: string) => {
   const qry = {
-    sql: 'SELECT uuid, name, artist from Songs WHERE uuid = @uuid',
+    sql: `SELECT uuid, name, artist from Songs WHERE uuid = @uuid`,
     params: {
-      uuid: sid,
+      uuid: uuid,
+    },
+    types: {
+      uuid: {
+        type: 'string'
+      }
     }
   }
   return database.run(qry)

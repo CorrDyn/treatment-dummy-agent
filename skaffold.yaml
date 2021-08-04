@@ -14,11 +14,12 @@ requires:
 build:
   artifacts:
   - image: dummy-agent
-    buildpacks:
-      builder: "gcr.io/buildpacks/builder"
-      trustBuilder: true
-      env:
-        - NODE_ENV=development
+    docker:
+      # Use the image labeled as 'devel' in the Dockerfile
+      target: devel
+    sync:
+      infer:
+      - src/**/*
   local: {}
 
 deploy:
