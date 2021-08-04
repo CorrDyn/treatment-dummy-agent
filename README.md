@@ -146,7 +146,30 @@ Keep-Alive: timeout=5
 
 #### How can I monitor what is going on in the Redis store ? 
 
-Redis has a convenient command called `monitor`. You can 
+Redis has a convenient command called `monitor`. You can get shell into the redis container and run the `monitor` command from the redis CLI. It will print the corresponding output for every command that runs against the redis container.
+
+```console
+# Make sure you are talking to the right daemon
+$ eval $(minikube docker-env)
+
+# Find the container running redis
+$ docker ps | grep redis
+b90bf4fe93e3   eb705d309426             "docker-entrypoint.s…"   44 seconds ago   Up 43 seconds                          k8s_redis_redis-64c5d46d46-gpx4m_dev-agents_ebd15cc3-...
+
+# exec into the container using the ID
+$ docker exec -ti b90bf4fe93e3 redis-cli
+127.0.0.1:6379> monitor
+OK
+```
+
+#### How can I diagnose issues with skaffold ?
+
+You can use the `--verbosity` flag to switch between more verbose output of the command:
+
+```console
+$ skaffold dev --verbosity debug
+```
+
 
 ### More information on the tools in this configuration
 

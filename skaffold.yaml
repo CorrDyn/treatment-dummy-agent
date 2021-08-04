@@ -18,11 +18,9 @@ build:
       # Use the image labeled as 'devel' in the Dockerfile
       target: devel
     sync:
-      infer:
-      - src/**/*
-      # manual:
-      #   - src: 'src/*'
-      #     dest: '/opt/api'
+      manual:
+        - src: 'src/*'
+          dest: '/opt/api'
   local: {}
 
 deploy:
