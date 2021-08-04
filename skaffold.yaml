@@ -34,3 +34,20 @@ portForward:
   resourceName: dummy-agent
   namespace: dummies
   port: 8080
+
+profiles:
+- name: development
+  patches:
+    # We don't need the local dev containers here
+    - op: remove
+      path: /requires
+  build:
+    googleCloudBuild:
+      projectId: trmt-001
+
+  deploy:
+    kubeContext: corrdyn-edge2mesh
+    kustomize:
+      paths:
+      - .k8s/devel
+

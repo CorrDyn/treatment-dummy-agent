@@ -170,6 +170,31 @@ You can use the `--verbosity` flag to switch between more verbose output of the 
 $ skaffold dev --verbosity debug
 ```
 
+## GKE Cluster deployment
+
+The following diagram describes the architecture of a GKE deployment of the `Dummy Agent`. The architecture can be replied for as many environments it is required as long as there is appropriate access control in place for the Google Cloud Secrets for each environment.
+
+```text
+                                               |
+  [ GKE namespace: devel]                      |  [ Other GCP services ] 
+                                               |
+        +-----------------+                    |    +---------------+
+        |  Dummy Agent    |------------------------>| Cloud Secrets |
+        |  + wk identity  |                    |    +---------------+
+        +-----------------+                    |
+                |     |                        |    +---------------+
+                |     +---------------------------->| Cloud Spanner |
+                |                              |    +---------------+
+                |                              |
+                |                              |    +---------------+
+                +---------------------------------->| Memory Store  |
+                                               |    +---------------+
+```
+
+* The `Dummy Agent` container starts in the `devel` namespace.
+* A [workload identity][k8s-workload-identity] mapped to the deployment enables the container to communicate to both, Cloud Secrets and Cloud Spanner.
+* The `Dummy Agent` will connect to the [Google Cloud Secret manager][gcloud-secret-manager] on startup to fetch any secrets it requires at runtime.
+
 
 ### More information on the tools in this configuration
 
@@ -180,6 +205,7 @@ $ skaffold dev --verbosity debug
 
 
 [gcloud-sdk]: https://cloud.google.com/sdk/docs/install
+[gcloud-secret-manager]: https://cloud.google.com/secret-manager
 [docker-install]: https://docs.docker.com/get-docker/
 [kustomize-install]: https://kubectl.docs.kubernetes.io/installation/kustomize/
 [minikube]: https://minikube.sigs.k8s.io/docs/start/
@@ -188,3 +214,4 @@ $ skaffold dev --verbosity debug
 [skaffold-install]: https://skaffold.dev/docs/install/
 [spanner-cli]: https://github.com/cloudspannerecosystem/spanner-cli
 [spanner-emulator]: https://cloud.google.com/spanner/docs/emulator
+[k8s-workload-identity]: https://cloud.google.com/kubernetes-engine/docs/how-to/workload-identity
