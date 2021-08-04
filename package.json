@@ -5,7 +5,7 @@
   "main": "src/dummy-agent.js",
   "scripts": {
     "compile": "tsc && node ./dist/dummy-agent.js",
-    "dev": "nodemon -w src --exec 'npm run compile'",
+    "dev": "nodemon -w src -e ts --exec 'npm run compile'",
     "start": "tsc && node ./dist/dummy-agent.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
