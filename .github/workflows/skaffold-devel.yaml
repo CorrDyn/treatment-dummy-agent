@@ -27,6 +27,7 @@ jobs:
           version: '350.0.0'
           service_account_key: ${{ secrets.DEVEL_GCP_CREDS }}
           project_id: ${{ env.PROJECT_ID }}
+          export_default_credentials: "true"
 
       - name: Config K8s
         uses: google-github-actions/get-gke-credentials@main
@@ -38,6 +39,7 @@ jobs:
       - name: Install K8s tools
         run: |-
           gcloud components install skaffold kustomize kubectl
+          gcloud auth
 
       - name: Deploy to GKE
         run: |-
