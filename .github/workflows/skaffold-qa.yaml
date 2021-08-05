@@ -1,9 +1,8 @@
 name: Deploy to QA GKE
 on:
-  push:
-    create:
-      tags:
-        - "v[0-9]+\.[0-9]+\.[0-9]+-qa"
+  create:
+    tags:
+      - "v[0-9]+\.[0-9]+\.[0-9]+-qa"
 
 env:
   PROJECT_ID: ${{ secrets.DEVEL_GCP_PROJECT }}
