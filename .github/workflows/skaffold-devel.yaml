@@ -17,10 +17,10 @@ jobs:
     name: Deploy
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout repository on development branch
+      - name: Checkout repository trunk
         uses: actions/checkout@v2
         with:
-          ref: development
+          ref: main
 
       - name: Config GCP
         uses: google-github-actions/setup-gcloud@master
