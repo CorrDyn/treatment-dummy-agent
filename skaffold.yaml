@@ -50,3 +50,16 @@ profiles:
       paths:
       - .k8s/devel
 
+- name: qa
+  patches:
+    # We don't need the local dev containers here
+    - op: remove
+      path: /requires
+  build:
+    googleCloudBuild: {}
+
+  deploy:
+    kubeContext: corrdyn-edge2mesh
+    kustomize:
+      paths:
+      - .k8s/qa

@@ -1,0 +1,17 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+namespace: qa-dummies
+
+resources:
+  - ../bases
+  - ./namespace.yaml
+
+configMapGenerator:
+- name: dummy-agent
+  literals:
+  - NODE_ENV=production
+  - TRACING_ENABLED="true"
+  - REDISURI="rediss://13.1.1.1/1"
+  - SPANNER_INSTANCE=production-1
+  - SPANNER_DB=qa-song-db
