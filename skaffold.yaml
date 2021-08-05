@@ -17,10 +17,10 @@ build:
     docker:
       # Use the image labeled as 'devel' in the Dockerfile
       target: devel
-    sync:
-      manual:
-        - src: 'src/*'
-          dest: '/opt/api'
+    # sync:
+    #   manual:
+    #     - src: 'src/*'
+    #       dest: '/opt/api'
   local: {}
 
 deploy:
