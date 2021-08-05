@@ -1,6 +1,6 @@
 name: Deploy to QA GKE
 on:
-  create:
+  push:
     tags:
       - "v[0-9]+\.[0-9]+\.[0-9]+-qa"
 
