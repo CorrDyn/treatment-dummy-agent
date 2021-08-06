@@ -56,6 +56,13 @@ profiles:
     - op: remove
       path: /requires
   build:
+    artifacts:
+    - image: dummy-agent
+      docker:
+        # Use the image labeled as 'prod' in the Dockerfile
+        target: prod
+        buildArgs:
+          NODE_ENV: production
     googleCloudBuild: {}
 
   deploy:
