@@ -8,12 +8,12 @@ The `skaffold.yaml` file defines rules for building and deploying the Dummy serv
 
 The Dummy service relies on 2 containers: a [redis][redis] container and a [Google Cloud Spanner emulator][spanner-emulator] container. These containers will be used to emulate a production environment in your local machine. 
 
-All running services will be mapped to ports on your local machine so you can access the corresponding containers so you can call the service API, load data into the Cloud spanner emulator or modify entries in the redis store.
+All running services will be mapped to ports on your local machine so you can access the corresponding containers so you can call the service API, load data into the Cloud spanner emulator or modify entries in the Redis store.
 
 ```text
   
                                               |
-  [namespace: dummies]                        |   [namespace: dev-agents]
+  [namespace: default]                        |   [namespace: dev-agents]
                                               |
                                               |
     +-------------+                           |           +------------------+
@@ -50,7 +50,7 @@ All running services will be mapped to ports on your local machine so you can ac
     # or start minikube if it's not running
     $ minikube start
     ```
-* Export the right environment variables to communicate with minikube 
+* Sets up docker env variables for working with Minikube
     ```console
     $ eval $(minikube docker-env)
     ```
@@ -170,13 +170,18 @@ You can use the `--verbosity` flag to switch between more verbose output of the 
 $ skaffold dev --verbosity debug
 ```
 
+#### I keep getting "Skipping deploy due to sync error: copying files: didn't sync any files"
+
+This is an existing [Skaffold issue](https://github.com/GoogleContainerTools/skaffold/issues/4246). To work around this you need to make sure that the Kubernetes `namespace` in your current Minikube context, matches the `namespace` to which you are syncing files.
+
+
 ## GKE Cluster deployment
 
 The following diagram describes the architecture of a GKE deployment of the `Dummy Agent`. The architecture can be replied for as many environments it is required as long as there is appropriate access control in place for the Google Cloud Secrets for each environment.
 
 ```text
                                                |
-  [ GKE namespace: devel]                      |  [ Other GCP services ] 
+  [ GKE namespace: development / qa]           |  [ Other GCP services ] 
                                                |
         +-----------------+                    |    +---------------+
         |  Dummy Agent    |------------------------>| Cloud Secrets |
@@ -191,9 +196,12 @@ The following diagram describes the architecture of a GKE deployment of the `Dum
                                                |    +---------------+
 ```
 
-* The `Dummy Agent` container starts in the `devel` namespace.
-* A [workload identity][k8s-workload-identity] mapped to the deployment enables the container to communicate to both, Cloud Secrets and Cloud Spanner.
+The CD pipeline [Github Actions][github-actions], will:
+* Deploy to the `development` Kubernetes namespace on merges to the `main` branch.
+* Deploy to the `qa` Kubernetes namespace on tags including the `-qa` suffix. ie. `v0.0.1-qa`.
+* A [workload identity][k8s-workload-identity] mapped to the deployment enables the container to communicate to both, Cloud Secret Manager and Cloud Spanner.
 * The `Dummy Agent` will connect to the [Google Cloud Secret manager][gcloud-secret-manager] on startup to fetch any secrets it requires at runtime.
+* The  `Dummy Agent` will connect to a Redis instance living in the [Google Memory Store][memory-store] using a credential obtained from the Cloud Secret Manager.
 
 
 ### More information on the tools in this configuration
@@ -206,8 +214,10 @@ The following diagram describes the architecture of a GKE deployment of the `Dum
 
 [gcloud-sdk]: https://cloud.google.com/sdk/docs/install
 [gcloud-secret-manager]: https://cloud.google.com/secret-manager
+[github-actions]: https://docs.github.com/en/actions
 [docker-install]: https://docs.docker.com/get-docker/
 [kustomize-install]: https://kubectl.docs.kubernetes.io/installation/kustomize/
+[memory-store]: https://cloud.google.com/memorystore/docs/redis/redis-overview
 [minikube]: https://minikube.sigs.k8s.io/docs/start/
 [redis]: https://redis.io/
 [skaffold]: https://skaffold.dev
